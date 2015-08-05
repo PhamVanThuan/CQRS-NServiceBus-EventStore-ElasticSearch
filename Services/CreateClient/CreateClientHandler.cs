@@ -1,38 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CrossCutting.Repository;
 using Domain.Aggregates;
 using Messages.Commands;
-using NServiceBus;
 using StructureMap;
 
 namespace CreateClient
 {
-    public class CreateClientHandler : IHandleMessages <CreateClientCommand>
+    public static class CreateClientHandler
     {
-        IDomainRepository domainRepository;
-
-
-        public CreateClientHandler(IDomainRepository domainRepository)
+        public static void Handle(CreateClientCommand message)
         {
-            this.domainRepository = domainRepository;
-        }
-
-        /// <summary>
-        /// This handles the CreateClientCommand. It stores the create client event and make the first deposit.
-        /// </summary>
-        /// <param name="message"></param>
-        public void Handle(CreateClientCommand message)
-        {                      
-                                            
+            Console.WriteLine("Received command: ClientId {0}", message.ClientID);
+            var domainRepository = ObjectFactory.GetInstance<IDomainRepository>();
             var client = Client.CreateClient(message.ClientID, message.Name);
-            client.Deposit(message.InitialDeposit, DateTime.UtcNow,message.TransactionId);
-
-            domainRepository.Save<Client>(client, true);
-                      
+            client.Deposit(message.InitialDeposit, DateTime.UtcNow, message.TransactionId);
+            domainRepository.Save(client, true);
         }
     }
 }

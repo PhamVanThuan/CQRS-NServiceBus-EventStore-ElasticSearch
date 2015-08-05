@@ -1,34 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CrossCutting.Repository;
 using Domain.Aggregates;
 using Messages.Commands;
-using NServiceBus;
 using StructureMap;
 
 namespace WithdrawMoney
 {
-    public class WithdrawMoneyHandler : IHandleMessages<WithdrawMoneyCommand>
+    public static class WithdrawMoneyHandler
     {
-        IDomainRepository domainRepository;
-
-        public WithdrawMoneyHandler( IDomainRepository domainRepository)
+        public static void Handle(WithdrawMoneyCommand message)
         {
-            this.domainRepository = domainRepository;
-        }
-
-
-        public void Handle(WithdrawMoneyCommand message)
-        {                       
-
+            Console.WriteLine("Received WithdrawMoneyCommand: ClientId {0}", message.ClientID);
+            var domainRepository = ObjectFactory.GetInstance<IDomainRepository>();
             var client = domainRepository.GetById<Client>(message.ClientID);
-
             client.Withdraw(message.Quantity, DateTime.UtcNow, message.TransactionId, message.FromATM);
-
-            domainRepository.Save<Client>(client);
+            domainRepository.Save(client);
         }
     }
 }

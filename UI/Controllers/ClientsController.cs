@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
+using EasyNetQ;
 using ElasticSearchReadModel.Documents;
 using ElasticSearchReadModel.Repositories;
 using Messages.Commands;
-using NServiceBus;
 using StructureMap;
 using UI.Controllers.DTOs;
 
@@ -15,8 +11,6 @@ namespace UI.Controllers
 {
     public class ClientsController : ApiController
     {
-        private static IBus bus;
-
         // GET: api/Client
         public IEnumerable<ClientInformation> Get()
         {
@@ -38,12 +32,12 @@ namespace UI.Controllers
         // POST: api/Client
         public void Post([FromBody] NewClientDTO newClient)
         {
-            MvcApplication.Bus.Send("CreateClient", new CreateClientCommand() 
+            MvcApplication.Bus.Publish(new CreateClientCommand() 
                                         {
                                             ClientID=newClient.id,
                                             Name=newClient.name,
-                                            InitialDeposit=newClient.initialDeposit 
-                                        });
+                                            InitialDeposit=newClient.initialDeposit
+                                        }, "CreateClient");
         }
 
         // PUT: api/Client/5
@@ -51,21 +45,21 @@ namespace UI.Controllers
         {
             if (updateClient.quantity >= 0)
             {
-                MvcApplication.Bus.Send("DepositMoney", new DepositMoneyCommand()
+                MvcApplication.Bus.Publish(new DepositMoneyCommand()
                 {
                     ClientID = updateClient.id,
                     Quantity = updateClient.quantity,
-                    FromATM = bool.Parse(updateClient.inATM?? "False")                 
-                });
+                    FromATM = bool.Parse(updateClient.inATM?? "False")
+                }, "DepositMoney");
             }
             else
             {
-                MvcApplication.Bus.Send("WithdrawMoney", new WithdrawMoneyCommand()
+                MvcApplication.Bus.Publish(new WithdrawMoneyCommand()
                 {
                     ClientID = updateClient.id,
                     Quantity = updateClient.quantity,
                     FromATM = bool.Parse(updateClient.inATM ?? "False")
-                });
+                }, "WithdrawMoney");
             }
         }
 

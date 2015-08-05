@@ -1,64 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using CrossCutting;
 using CrossCutting.Repository;
 using Domain.Events;
+using EasyNetQ;
 using ElasticSearchReadModel.Documents;
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.Common.Utils;
 using Messages.Events;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NServiceBus;
-using NServiceBus.Features;
 using Topshelf;
 
 namespace ElasticSearchSychronizer
 {
     public class ElasticSearchSychronizer
     {
-        private static IBus bus;
-
-        public static IBus Bus
-        {
-            get { return bus; }
-        }
+        static readonly IBus Bus = RabbitHutch.CreateBus("host=localhost;publisherConfirms=true");
 
         private Indexer indexer;
         private Dictionary<Type, Action<object>> eventHandlerMapping;
         private Position? latestPosition;
         private IEventStoreConnection connection;
 
-        
-        public ElasticSearchSychronizer()
-        {
-            
-        }
         public void Start() 
         {
-            //NServiceBus
-            BusConfiguration busConfiguration = new BusConfiguration();
-                        
-            
-            busConfiguration.UsePersistence<InMemoryPersistence>();
-            busConfiguration.EnableInstallers();
-
-            var startableBus = NServiceBus.Bus.Create(busConfiguration);
-            bus = startableBus.Start();
-
-
             indexer = new Indexer();
             indexer.Init();
             connection = Configuration.CreateConnection();
 
             eventHandlerMapping = CreateEventHandlerMapping();
             ConnectToEventstore();
-        
         }
+
         public void Stop() 
         { 
            

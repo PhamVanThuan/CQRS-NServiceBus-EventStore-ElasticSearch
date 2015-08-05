@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using ElasticSearchReadModel.Documents;
 using Nest;
 
 namespace ElasticSearchReadModel.Repositories
 {
-    public class ClientInformationRepository : ElasticSearchReadModel.Repositories.IClientInformationRepository
+    public class ClientInformationRepository : IClientInformationRepository
     {
         private const string INDEX = "metermanager";
 
-        public List<ClientInformation> GetClientsBy(string name, bool? onlyPossiblyStolen)
+        public IEnumerable<ClientInformation> GetClientsBy(string name, bool? onlyPossiblyStolen)
         {
             ElasticClient esClient;
                         
