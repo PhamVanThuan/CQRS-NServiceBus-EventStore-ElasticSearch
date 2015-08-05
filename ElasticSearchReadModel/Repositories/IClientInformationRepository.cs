@@ -1,10 +1,10 @@
-﻿using System;
-
+﻿using System.Collections.Generic;
+using ElasticSearchReadModel.Documents;
 
 namespace ElasticSearchReadModel.Repositories
 {
     public interface IClientInformationRepository
     {
-        System.Collections.Generic.List<ElasticSearchReadModel.Documents.ClientInformation> GetClientsBy(string name, bool? onlyPossiblyStolen);
+        IEnumerable<ClientInformation> GetClientsBy(string name, bool? onlyPossiblyStolen);
     }
 }
