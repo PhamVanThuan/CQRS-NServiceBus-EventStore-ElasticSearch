@@ -15,7 +15,6 @@ namespace WithdrawMoney
             var client = domainRepository.GetById<Client>(message.ClientID);
             client.Withdraw(message.Quantity, DateTime.UtcNow, message.TransactionId, message.FromATM);
             domainRepository.Save(client);
-            Console.WriteLine("Completed WithdrawMoneyCommand: ClientId {0} ", message.ClientID);
         }
     }
 }

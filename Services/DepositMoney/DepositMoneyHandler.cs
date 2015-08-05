@@ -15,7 +15,6 @@ namespace DepositMoney
             var client = domainRepository.GetById<Client>(message.ClientID);
             client.Deposit(message.Quantity, DateTime.UtcNow, message.TransactionId, message.FromATM);
             domainRepository.Save<Client>(client);
-            Console.WriteLine("Completed DepositMoneyCommand: ClientId {0} ", message.ClientID);
         }
     }
 }

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CrossCutting.DomainBase;
 using Domain.Events;
 
 namespace Domain.Aggregates
 {
-    public class Client : AggregateBase,IAggregate
+    public class Client : AggregateBase
     {
         public string ID { get; set; }
 
@@ -20,7 +16,6 @@ namespace Domain.Aggregates
         {
             get { return ID; }
         }
-
 
         public Client()
         {
