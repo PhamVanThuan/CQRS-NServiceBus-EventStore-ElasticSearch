@@ -6,7 +6,7 @@ Prototipe showing a CQRS architecture using EasynetQ EventStore and ElasticSearc
 Originally created using NServiceBus as event dispatcher. 
 I implemented the same behaviours using EasynetQ and RabbitMq as Bus infrastructure.
 
-More info on my blog: http://www.dinuzzo.co.uk 
+More info on my blog: http://dinuzzouk.azurewebsites.net/cqrs-with-event-sourcing-using-easynetq-event-store-elastic-search-angularjs-and-asp-net-mvc/  
 
 Based on Pablo Castilla blog post:
 http://pablocastilla.wordpress.com/2014/09/22/cqrs-with-event-sourcing-using-nservicebus-event-store-elastic-search-angularjs-and-asp-net-mvc/
@@ -14,10 +14,10 @@ http://pablocastilla.wordpress.com/2014/09/22/cqrs-with-event-sourcing-using-nse
 
 To run it you need to:
 
-ñ Download event store and run it. For example: ì.\EventStore.ClusterNode.exe -db .\ESData --run-projections=ALLî
+‚Äì Download event store and run it. For example: ‚Äú.\EventStore.ClusterNode.exe -db .\ESData --run-projections=ALL‚Äù
 
-ñ Load the projections in the .NET solution (EventStore/Projections) on event store. Create them as continuous. Make sure that every projection in the system is running.
+‚Äì Load the projections in the .NET solution (EventStore/Projections) on event store. Create them as continuous. Make sure that every projection in the system is running.
 
-ñ Download ElasticSearch
+‚Äì Download ElasticSearch
 
-ñ Run the services, UI and the synchronicers.
+‚Äì Run the services, UI and the synchronicers.
